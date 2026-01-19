@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lifestyle Photography - Emily He</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Teko:wght@300&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* === FOOTER POSITIONING FIX === */
+      html, body {
+          height: 100%;
+      }
+
+      body {
+        font-family: "Libre Caslon Display", serif;
+        line-height: 1.6;
+        background: linear-gradient(135deg, #d8d7cb 0%, #f5f4e9 100%);
+        color: #4f463a;
+        overflow-x: hidden;
+        /* Flex column allows us to push footer to bottom */
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; 
+      }
+
+      /* This pushes the footer down by taking up all available space */
+      .gallery-container {
+        flex: 1;
+      }
+
+      /* === Gallery页面的导航栏 === */
+      nav {
+        font-family: playfair;
+        background: linear-gradient(135deg, #778ba0 0%, #b7cfef 100%);
+        padding: 30px 50px;
+        text-align: center;
+        position: fixed;
+        top: -100px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 20px rgba(79, 70, 58, 0.2);
+        border-bottom: 1px solid white;
+        transition: top 0.5s ease;
+        z-index: 9999;
+      }
+
+      nav.visible {
+        top: 0;
+      }
+
+      .nav-logo {
+        height: 60px;
+        filter: brightness(0) invert(1);
+      }
+
+      .navs {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: right;
+      }
+
+      .navs li {
+        margin: 0 15px;
+        position: relative; 
+      }
+
+      .navs a {
+        color: white;
+        font-size: 18px;
+        padding: 12px 24px;
+        display: block;
+        text-decoration: none;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .navs a:hover {
+        background-color: rgba(255,255,255,0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+      }
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdownmenu {
+        display: none;
+        position: absolute;
+        background: rgba(79, 70, 58, 0.95);
+        top: 100%;
+        left: 0;
+        list-style: none;
+        padding: 10px 0;
+        margin: 0;
+        width: 220px;
+        text-align: left;
+        z-index: 10;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        border: 1px solid #b7cfef;
+      }
+
+      .dropdownmenu li {
+        padding: 10px 20px;
+        position: relative;
+      }
+
+      .dropdownmenu a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        font-size: 15px;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .dropdownmenu a:hover {
+        background-color: #b7cfef;
+        color: #4F463A;
+        transform: translateX(5px);
+      }
+
+      .dropdown:hover .dropdownmenu {
+        display: block;
+      }
+
+      /* 二级下拉菜单 - 放在左边 */
+      .dropdown-sub {
+        position: relative;
+      }
+
+      .submenu {
+        display: none;
+        position: absolute;
+        right: 100%; /* 改为右边对齐到左边 */
+        top: 0;
+        background: rgba(69, 60, 48, 0.95); /* 稍微深一点的背景色 */
+        list-style: none;
+        padding: 10px 0;
+        margin: 0;
+        width: 220px;
+        text-align: left;
+        z-index: 20;
+        border-radius: 15px 0 15px 15px; /* 调整圆角 */
+        backdrop-filter: blur(10px);
+        border: 1px solid #b7cfef;
+        box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.3); /* 阴影在左边 */
+      }
+
+      .dropdown-sub:hover .submenu {
+        display: block;
+      }
+
+      .submenu li {
+        padding: 8px 20px;
+      }
+
+      .submenu a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        font-size: 14px;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: transparent;
+        transition: all 0.3s ease;
+      }
+
+      .submenu a:hover {
+        background-color: #b7cfef;
+        color: #4F463A;
+        transform: translateX(-5px); /* 向左移动 */
+      }
+
+      /* 为有子菜单的项添加箭头指示 */
+      .dropdownmenu .dropdown-sub > a {
+        position: relative;
+        padding-right: 30px; /* 为箭头留出空间 */
+      }
+
+      .dropdownmenu .dropdown-sub > a::after {
+        content: '◀'; /* 改为向左的箭头 */
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        opacity: 0.7;
+      }
+
+      /* 响应式调整 */
+      @media (max-width: 1024px) {
+        .submenu {
+          position: static;
+          right: auto;
+          top: auto;
+          width: 100%;
+          border-radius: 0 0 15px 15px;
+          margin-top: 5px;
+          background: rgba(89, 80, 68, 0.95);
+        }
+        
+        .dropdownmenu .dropdown-sub > a::after {
+          content: '▾'; /* 在移动端改为向下箭头 */
+        }
+        
+        .submenu a:hover {
+          transform: translateX(5px); /* 在移动端向右移动 */
+        }
+      }
+
+      /* 摄影页面头部 */
+      .photography-hero {
+        height: 80vh;
+        background: linear-gradient(135deg, #778ba0 0%, #b7cfef 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        margin-top: 0;
+      }
+
+      .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("Images/Background.jpg") center/cover no-repeat;
+        opacity: 0.15;
+      }
+
+      /* 摄影装饰元素 */
+      .camera-elements {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .camera-element {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        background: conic-gradient(from 45deg, #b7cfef, #778ba0, #b7cfef);
+        border-radius: 50%;
+        opacity: 0.15;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .lens-element {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background: radial-gradient(circle, #b7cfef 0%, transparent 70%);
+        border-radius: 50%;
+        opacity: 0.15;
+        animation: pulse 4s ease-in-out infinite;
+      }
+
+      .aperture-element {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background: repeating-conic-gradient(
+          from 0deg,
+          #4f463a 0deg 10deg,
+          transparent 10deg 20deg
+        );
+        opacity: 0.1;
+        animation: rotate 20s linear infinite;
+      }
+
+      .filmstrip-element {
+        position: absolute;
+        width: 100px;
+        height: 20px;
+        background: repeating-linear-gradient(
+          to right,
+          #4f463a,
+          #4f463a 10px,
+          transparent 10px,
+          transparent 20px
+        );
+        opacity: 0.2;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(10deg);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.25;
+          transform: scale(1.2);
+        }
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .hero-content {
+        text-align: center;
+        z-index: 2;
+        padding: 0 20px;
+        max-width: 800px;
+        color: white;
+      }
+
+      .hero-title {
+        font-family: "Teko", sans-serif;
+        font-size: 5rem;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 500px;
+        margin: 0 auto 40px;
+        font-weight: 300;
+        letter-spacing: 2px;
+      }
+
+      .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-top: 30px;
+      }
+
+      .hero-stat {
+        text-align: center;
+        padding: 15px 25px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+      }
+
+      .hero-stat-number {
+        font-family: "Teko", sans-serif;
+        font-size: 2rem;
+        color: white;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        font-size: 0.85rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* 画廊容器 */
+      .gallery-container {
+        padding: 60px 5%;
+        margin: 0 auto;
+        width: 100%; /* Ensure full width */
+        background: linear-gradient(180deg, #f5f4e9 0%, #e8e7dc 100%);
+      }
+
+      /* 分类标题 */
+      .category-section {
+        margin-bottom: 80px;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease forwards;
+      }
+
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .category-header {
+        text-align: center;
+        margin-bottom: 50px;
+        padding-bottom: 20px;
+        border-bottom: 3px solid #b7cfef;
+        position: relative;
+      }
+
+      .category-header h3 {
+        font-family: "Teko", sans-serif;
+        font-size: 2.8rem;
+        color: #4f463a;
+        display: inline-flex;
+        align-items: center;
+        gap: 15px;
+        padding: 0 30px;
+        background: rgba(248, 247, 235, 0.9);
+        position: relative;
+        z-index: 2;
+      }
+
+      .category-icon {
+        font-size: 2.2rem;
+      }
+
+      .category-description {
+        color: #666;
+        font-size: 1.1rem;
+        margin-top: 15px;
+        max-width: 500px;
+        margin: 15px auto 0;
+      }
+
+      /* 2横4竖网格布局 - 使用嵌套flexbox实现 */
+      .photo-grid-2x4 {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* 第一行：两张横屏照片 - 水平排列 */
+      .horizontal-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 两列 */
+        gap: 25px;
+      }
+
+      .horizontal-row .photo-item {
+        aspect-ratio: 16/9; /* 横屏比例 */
+      }
+
+      /* 第二行：四张竖屏照片 - 水平排列 */
+      .vertical-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 四列 */
+        gap: 25px;
+      }
+
+      .vertical-row .photo-item {
+        aspect-ratio: 2/3; /* 竖屏比例 */
+      }
+
+      /* 照片项样式 */
+      .photo-item {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        background: white;
+        box-shadow: 0 10px 30px rgba(79, 70, 58, 0.2);
+      }
+
+      .photo-item:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 20px 40px rgba(79, 70, 58, 0.4);
+      }
+
+      .photo-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+      }
+
+      .photo-item:hover .photo-image {
+        transform: scale(1.05);
+      }
+
+      .photo-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(79, 70, 58, 0.9));
+        color: white;
+        padding: 25px 20px 15px;
+        transform: translateY(100%);
+        transition: all 0.4s ease;
+        backdrop-filter: blur(8px);
+      }
+
+      .photo-item:hover .photo-info {
+        transform: translateY(0);
+      }
+
+      .photo-number {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(183, 207, 239, 0.9);
+        color: #4f463a;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Teko", sans-serif;
+        font-size: 1.2rem;
+        font-weight: bold;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.3s ease;
+      }
+
+      .photo-item:hover .photo-number {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .photo-caption {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 5px;
+        line-height: 1.3;
+      }
+
+      .photo-location {
+        font-size: 0.9rem;
+        color: #b7cfef;
+        opacity: 0.9;
+      }
+
+      /* 摄影数据展示 */
+      .photography-stats {
+        background: linear-gradient(135deg, #ffffff, #f5f4e9);
+        border-radius: 20px;
+        padding: 50px 40px;
+        margin: 80px auto;
+        max-width: 900px;
+        text-align: center;
+        border: 3px solid #b7cfef;
+        box-shadow: 0 20px 40px rgba(79, 70, 58, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .photography-stats h3 {
+        font-family: "Teko", sans-serif;
+        font-size: 2.5rem;
+        color: #4f463a;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .stats-summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-top: 40px;
+      }
+
+      .summary-item {
+        text-align: center;
+        padding: 20px;
+        background: rgba(183, 207, 239, 0.1);
+        border-radius: 12px;
+        border: 2px solid rgba(183, 207, 239, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .summary-item:hover {
+        background: rgba(183, 207, 239, 0.2);
+        transform: translateY(-3px);
+      }
+
+      .summary-number {
+        font-family: "Teko", sans-serif;
+        font-size: 2.5rem;
+        color: #778ba0;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .summary-label {
+        color: #4f463a;
+        font-size: 1rem;
+        opacity: 0.9;
+      }
+
+      /* 分隔线装饰 */
+      .section-divider {
+        position: relative;
+        height: 60px;
+        margin: 60px auto;
+        max-width: 1000px;
+        overflow: hidden;
+      }
+
+      .filmstrip-divider {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+          to right,
+          #4f463a,
+          #4f463a 15px,
+          transparent 15px,
+          transparent 30px
+        );
+        opacity: 0.1;
+      }
+
+      /* 摄影工具提示 */
+      .photo-tooltip {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: rgba(79, 70, 58, 0.8);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: all 0.3s ease;
+        pointer-events: none;
+        backdrop-filter: blur(5px);
+      }
+
+      .photo-item:hover .photo-tooltip {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      
+      /* ===== REPLACED FOOTER STYLES (MATCHING GALLERY) ===== */
+        footer {
+            background: linear-gradient(135deg, #778ba0 0%, #4F463A 100%);
+            color: white;
+            padding: 70px 0 25px;
+            margin-top: 100px;
+            width: 100%; /* Ensure width is handled correctly */
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        /* 品牌区域 - 修改布局 */
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 25px;
+        }
+
+        .footer-logo {
+            width: 150px;
+            filter: brightness(0) invert(1);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(183, 207, 239, 0.15);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(183, 207, 239, 0.3);
+            overflow: hidden;
+        }
+
+        .social-link:hover {
+            background: rgba(183, 207, 239, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(183, 207, 239, 0.25);
+        }
+
+        .social-link img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        .social-link:hover img {
+            transform: scale(1.1);
+        }
+
+        /* 选项1: 图标在Logo右侧 */
+        .footer-brand.horizontal {
+            flex-direction: row;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .footer-brand.horizontal .social-links {
+            margin-top: 0;
+            margin-left: 20px;
+        }
+
+        /* 选项2: 图标在Logo下方（默认） */
+        .footer-brand.vertical {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .footer-brand.vertical .social-links {
+            margin-top: 15px;
+        }
+
+        /* 导航区域 */
+        .footer-nav {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .nav-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-column h4 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #b7cfef;
+            font-family: "Teko", sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .nav-column h4::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 25px;
+            height: 2px;
+            background: #b7cfef;
+        }
+
+        .nav-column a {
+            color: #d8d7cb;
+            text-decoration: none;
+            padding: 8px 0;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .nav-column a:hover {
+            color: #b7cfef;
+            transform: translateX(3px);
+        }
+
+        /* Footer 底部 */
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 50px auto 0;
+            padding: 25px 5% 0;
+            border-top: 1px solid rgba(183, 207, 239, 0.2);
+            text-align: center;
+            color: #b7cfef;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .footer-credit {
+            opacity: 0.7;
+            font-size: 0.8rem !important;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .footer-container {
+                gap: 60px;
+            }
+            
+            .footer-nav {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                padding: 50px 0 20px;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            
+            .footer-brand {
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .footer-brand.horizontal {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .footer-brand.horizontal .social-links {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+            
+            .social-link {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .social-link img {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .footer-nav {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .nav-column h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-container {
+                padding: 0 20px;
+            }
+            
+            .footer-bottom {
+                padding: 20px 20px 0;
+            }
+            
+            .social-links {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+  <body>
+    <nav id="mainNav">
+      <img src="Images/Logo.png" alt="Logo" class="nav-logo" />
+      <ul class="navs">
+        <li><a href="Index.html">Home</a></li>
+        <li class="dropdown">
+          <a href="Gallery.html">Gallery</a>
+          <ul class="dropdownmenu">
+            <li class="dropdown-sub">
+              <a href="javascript:void(0);">Photography</a>
+              <ul class="submenu">
+                <li><a href="Lifestyle Photography.html">Lifestyle Photography</a></li>
+                <li><a href="Product Photography.html">Product Photography</a></li>
+              </ul>
+            </li>
+            <li><a href="Media-Production.html">Media Production</a></li>
+            <li><a href="Graphic-Design.html">Graphic Design</a></li>
+            <li><a href="Web-Design.html">Web Design</a></li>
+            <li><a href="Brand-Identity.html">Brand Identity</a></li>
+          </ul>
+        </li>
+        <li><a href="Resume.html">Resume</a></li>
+      </ul>
+    </nav>
+
+    <div class="photography-hero">
+      <div class="camera-elements">
+        <div class="camera-element" style="top: 20%; left: 10%"></div>
+        <div class="lens-element" style="top: 60%; right: 15%"></div>
+        <div class="camera-element" style="bottom: 30%; left: 20%"></div>
+        <div class="lens-element" style="top: 40%; right: 25%"></div>
+        <div class="aperture-element" style="top: 15%; right: 10%"></div>
+        <div class="aperture-element" style="bottom: 20%; left: 15%"></div>
+        <div
+          class="filmstrip-element"
+          style="top: 80%; left: 5%; transform: rotate(15deg)"
+        ></div>
+        <div
+          class="filmstrip-element"
+          style="top: 10%; right: 5%; transform: rotate(-10deg)"
+        ></div>
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">LIFESTYLE PHOTOGRAPHY</h1>
+        <p class="hero-subtitle">
+          Capturing authentic moments and stories through the lens
+        </p>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-number">30+</span>
+            <span class="stat-label">Selected Photos</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number">5</span>
+            <span class="stat-label">Categories</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-number">6</span>
+            <span class="stat-label">Featured Projects</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-container">
+      <div class="category-section" style="animation-delay: 0.1s">
+        <div class="category-header">
+          <h3>
+            <span class="category-icon">📸</span>
+            PORTRAIT PHOTOGRAPHY
+          </h3>
+          <p class="category-description">
+            Capturing personality and emotion in every frame
+          </p>
+        </div>
+
+        <div class="photo-grid-2x4">
+          <div class="horizontal-row">
+            <div class="photo-item">
+              <span class="photo-tooltip">Click to view full size</span>
+              <span class="photo-number">1</span>
+              <img
+                src="Images/Portrait 4.jpeg"
+                alt="Portrait 1"
+                class="photo-image"
+              />
+              <div class="photo-info">
+                <div class="photo-caption">Memory.</div>
+                <div class="photo-location">Outdoor| Canon EOS Kiss X7i</div>
+              </div>
+            </div>
+
+            <div class="photo-item">
+              <span class="photo-tooltip">Click to view full size</span>
+              <span class="photo-number">2</span>
+              <img
+                src="Images/Portrait 5.jpeg"
+                alt="Portrait 2"
+                class="photo-image"
+              />
+              <div class="photo-info">
+                <div class="photo-caption">Pure Joy.</div>
+                <div class="photo-location">Lakeside | Canon G7X III</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="vertical-row">
+            <div class="photo-item">
+              <span class="photo-tooltip">Click to view full size</span>
+              <span class="photo-number">3</span>
+              <img src="Images/Img11.JPG" alt="Portrait 3" class="photo-image" />
+              <div class="photo-info">
+                <div class="photo-caption">Magic Moments.</div>
+                <div class="photo-location">Home Session | Canon G7X III</div>
+              </div>
+            </div>
+
+            <div class="photo-item">
+              <span class="photo-tooltip">Click to view full size</span>
+              <span class="photo-number">4</span>
+              <img
+                src="Images/Portrait 1.jpg"
+                alt="Portrait 4"
+                class="photo-image"
+              />
+              <div class="photo-info">
+                <div class="photo-caption">Chapter 20.</div>
+                <div class="photo-location">Home Session | Canon G7X III</div>
+              </div>
+            </div>
+
+            <div class="photo-item">
+              <span class="photo-tooltip">Click to view full size</span>
+              <span class="photo-number">5</span>
+              <img
+                src="Images/Portrait 2.jpg"
+                alt="Portrait 5"
+                class="photo-image"
+              />
+              <div class="photo-info">
+                <div class="photo-caption">To See You.</div>
+                <div class="photo-location">Sankofa Square | Canon G7X III</div>
+              </div>
+            </div>
+
+            <div class="photo-item">
+              <span class="photo-tooltip">Click to view full size</span>
+              <span class="photo-number">6</span>
+              <img
+                src="Images/Portrait 3.JPG"
+                alt="Portrait 6"
+                class="photo-image"
+              />
+              <div class="photo-info">
+                <div class="photo-caption">Breeze.</div>
+                <div class="photo-location">Cancún Beachside | Canon M200</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider">
+        <div class="filmstrip-divider"></div>
+      </div>
+
+      <div class="category-section" style="animation-delay: 0.2s">
+  <div class="category-header">
+    <h3>
+      <span class="category-icon">🎨</span>
+      PHOTOGRAPHY COLLECTION
+    </h3>
+    <p class="category-description">
+      A curated selection of my best work across various styles and themes
+    </p>
+  </div>
+
+  <div class="photo-grid-2x4">
+    <div class="horizontal-row">
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">7</span>
+        <img
+          src="Images/Photography 3.jpeg"
+          alt="Street Photography"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Little Wishes.</div>
+          <div class="photo-location">Rock Art | Canon G7X III</div>
+        </div>
+      </div>
+
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">8</span>
+        <img src="Images/Img7.JPG" alt="Landscape" class="photo-image" />
+        <div class="photo-info">
+          <div class="photo-caption">Mountain City.</div>
+          <div class="photo-location">Chongqing | Canon G7X III</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vertical-row">
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">9</span>
+        <img src="Images/Photography 9.jpg" alt="Concert" class="photo-image" />
+        <div class="photo-info">
+          <div class="photo-caption">Drifting.</div>
+          <div class="photo-location">Seaside | Canon G7X III</div>
+        </div>
+      </div>
+
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">10</span>
+        <img
+          src="Images/Photography 13.JPG"
+          alt="Architecture"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Shadow Play.</div>
+          <div class="photo-location">Palm Beach | Canon M200</div>
+        </div>
+      </div>
+
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">11</span>
+        <img
+          src="Images//Img6.JPG"
+          alt="Nature Photography"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Urban Stories</div>
+            <div class="photo-location">City Streets | Canon G7X III</div>
+        </div>
+      </div>
+
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">12</span>
+        <img
+          src="Images/Img8.JPG"
+          alt="Urban Photography"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Stage Energy</div>
+          <div class="photo-location">Live Performance | Canon G7X III</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-row">
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">13</span>
+        <img
+          src="Images/Landscape 1.jpg"
+          alt="Additional Landscape"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Stone Tale.</div>
+          <div class="photo-location">Thousand Islands | Canon G7X III</div>
+        </div>
+      </div>
+
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">14</span>
+        <img
+          src="Images/Photography 4.JPG"
+          alt="Additional Architecture"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Spotlight.</div>
+          <div class="photo-location">Live Concert | Canon M200</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-row">
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">13</span>
+        <img
+          src="Images/Photography 6.JPG"
+          alt="Additional Landscape"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Harbor Night.</div>
+          <div class="photo-location">Victoria Harbour | Canon G7X III</div>
+        </div>
+      </div>
+
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">14</span>
+        <img
+          src="Images/Photography 7.JPG"
+          alt="Additional Architecture"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Neon Life.</div>
+          <div class="photo-location">Changsha | Canon M200</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vertical-row">
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">15</span>
+        <img
+          src="Images/Photography 10.JPG"
+          alt="Portrait Style 1"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Geometry.</div>
+          <div class="photo-location">Davis Center | Iphone 11</div>
+        </div>
+      </div>
+
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">16</span>
+        <img
+          src="Images/Photography 5.jpg"
+          alt="Portrait Style 2"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Passing By.</div>
+          <div class="photo-location">On the Road | Iphone 11</div>
+        </div>
+      </div>
+
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">17</span>
+        <img
+          src="Images/Photography 12.JPG"
+          alt="Portrait Style 3"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Ice Time.</div>
+          <div class="photo-location">Winter Rink | Canon EOS R7</div>
+        </div>
+      </div>
+
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">18</span>
+        <img
+          src="Images/Photography 8.JPG"
+          alt="Portrait Style 4"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Rush.</div>
+          <div class="photo-location">GO Station | Canon M200</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-row">
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">13</span>
+        <img
+          src="Images/Photography 11.JPG"
+          alt="Additional Landscape"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Royal Guards.</div>
+          <div class="photo-location">Thailand | Canon G7X III</div>
+        </div>
+      </div>
+
+      <div class="photo-item">
+        <span class="photo-tooltip">Click to view full size</span>
+        <span class="photo-number">14</span>
+        <img
+          src="Images/Photography 2.jpeg"
+          alt="Additional Architecture"
+          class="photo-image"
+        />
+        <div class="photo-info">
+          <div class="photo-caption">Chao Phraya.</div>
+          <div class="photo-location">Thailand | Canon M200</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+      <div class="photography-stats">
+        <h3>COLLECTION SUMMARY</h3>
+        <p style="color: #666; margin-bottom: 40px; font-size: 1.1rem">
+          A comprehensive showcase of photographic work
+        </p>
+        <div class="stats-summary">
+          <div class="summary-item">
+            <span class="summary-number">22</span> <span class="summary-label">Featured Photos</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-number">5</span>
+            <span class="summary-label">Camera Models</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-number">8</span> <span class="summary-label">Photography Styles</span>
+          </div>
+        </div>
+      </div>
+
+    </div> <footer>
+        <div class="footer-container">
+            <div class="footer-brand vertical">
+                <img src="Images/Logo.png" alt="Logo" class="footer-logo">
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/emily-he-b638b8252" target="_blank" class="social-link" title="LinkedIn">
+                        <img src="Images/LinkedIn.png" alt="LinkedIn">
+                    </a>
+                    <a href="https://www.instagram.com/hxl_emily/" target="_blank" class="social-link" title="Instagram">
+                        <img src="Images/Instagram.png" alt="Instagram">
+                    </a>
+                    <a href="mailto:emilyhe.i0923@gmail.com" class="social-link" title="Email">
+                        <img src="Images/Email.png" alt="Email">
+                    </a>
+                </div>
+            </div>
+    
+            <div class="footer-nav">
+                <div class="nav-column">
+                    <h4>Navigation</h4>
+                    <a href="Index.html">Home</a>
+                    <a href="Gallery.html">Gallery</a>
+                    <a href="Resume.html">Resume</a>
+                </div>
+                
+                <div class="nav-column">
+                    <h4>Portfolio</h4>
+                    <a href="Lifestyle Photography.html">Lifestyle Photography</a>
+                <a href="Media-Production.html">Media Production</a>
+                <a href="Graphic-Design.html">Graphic Design</a>
+            </div>
+            <div class="nav-column">
+                <h4>Design</h4>
+                <a href="Product Photography.html">Product Photography</a>
+                <a href="Web-Design.html">Web Design</a>
+                <a href="Brand-Identity.html">Brand Identity</a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="footer-bottom">
+            <p>&copy; 2026 Emily He's Portfolio. All rights reserved.</p>
+            <p class="footer-credit">Crafted with passion and precision</p>
+        </div>
+    </footer>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const nav = document.getElementById("mainNav");
+    
+        // 1. 导航栏滚动显示
+        window.addEventListener("scroll", function () {
+          let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          if (scrollTop > 100) {
+            nav.classList.add("visible");
+          } else {
+            nav.classList.remove("visible");
+          }
+        });
+    
+        // 2. 照片点击放大 (Lightbox)
+        const photoItems = document.querySelectorAll(".photo-item");
+        
+        photoItems.forEach((item) => {
+          item.addEventListener("click", function () {
+            const imgSrc = this.querySelector(".photo-image").src;
+            const caption = this.querySelector(".photo-caption").textContent;
+            const location = this.querySelector(".photo-location").textContent;
+    
+            // 创建模态窗口容器
+            const modal = document.createElement("div");
+            modal.className = "custom-modal"; // 给它加个类名方便管理
+            modal.style.cssText = `
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(0,0,0,0.95);
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              z-index: 99999;
+              backdrop-filter: blur(10px);
+              padding: 20px;
+              opacity: 0; 
+              transition: opacity 0.3s ease; /* 加个淡入淡出效果 */
+            `;
+    
+            // 设置内容
+            modal.innerHTML = `
+              <div style="max-width: 90%; max-height: 70vh;">
+                <img src="${imgSrc}" alt="${caption}" style="
+                  max-width: 100%;
+                  max-height: 70vh;
+                  object-fit: contain;
+                  border-radius: 10px;
+                  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+                ">
+              </div>
+              <div style="
+                text-align: center;
+                color: white;
+                padding: 30px 20px 20px;
+                max-width: 600px;
+              ">
+                <h3 style="font-family: 'Teko', sans-serif; font-size: 2rem; margin-bottom: 8px; color: #b7cfef;">${caption}</h3>
+                <p style="color: #cccccc; font-size: 1.2rem; margin-bottom: 20px;">${location}</p>
+                <button class="close-modal-btn" style="
+                  background: rgba(183, 207, 239, 0.2);
+                  border: 2px solid rgba(183, 207, 239, 0.4);
+                  color: white;
+                  padding: 12px 30px;
+                  border-radius: 30px;
+                  font-family: 'Teko', sans-serif;
+                  font-size: 1.1rem;
+                  cursor: pointer;
+                  text-transform: uppercase;
+                  letter-spacing: 1px;
+                  transition: all 0.3s ease;
+                ">Close</button>
+              </div>
+            `;
+    
+            document.body.appendChild(modal);
+            
+            // 强制重绘后改变透明度，实现淡入效果
+            requestAnimationFrame(() => {
+              modal.style.opacity = "1";
+            });
+    
+            // === 核心修复：定义关闭函数 ===
+            const closeModal = () => {
+              modal.style.opacity = "0"; // 先淡出
+              setTimeout(() => {
+                if (document.body.contains(modal)) {
+                  document.body.removeChild(modal); // 再移除
+                }
+              }, 300); // 等待0.3秒动画结束
+            };
+    
+            // 绑定点击按钮关闭
+            const closeBtn = modal.querySelector(".close-modal-btn");
+            closeBtn.addEventListener("click", (e) => {
+                e.stopPropagation(); // 防止冒泡
+                closeModal();
+            });
+    
+            // 绑定点击背景关闭
+            modal.addEventListener("click", (e) => {
+              if (e.target === modal) {
+                closeModal();
+              }
+            });
+    
+            // 绑定ESC键关闭
+            const escHandler = (e) => {
+              if (e.key === "Escape") {
+                closeModal();
+                document.removeEventListener("keydown", escHandler);
+              }
+            };
+            document.addEventListener("keydown", escHandler);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

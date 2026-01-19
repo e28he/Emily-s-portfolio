@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic Design - Emily He</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap" rel="stylesheet">
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Teko:wght@300&display=swap");
+
+        /* === GLOBAL RESETS === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        
+        body {
+            font-family: "Libre Caslon Display", serif;
+            background-color: #ffffff;
+            color: #333;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            padding-top: 100px;
+        }
+
+        /* === NAV & FOOTER === */
+        nav {
+            font-family: playfair;
+            background: linear-gradient(135deg, #778ba0 0%, #b7cfef 100%);
+            padding: 30px 50px;
+            text-align: center;
+            position: fixed;
+            top: -100px;
+            left: 0; right: 0;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 20px rgba(79, 70, 58, 0.2);
+            border-bottom: 1px solid white;
+            transition: top 0.5s ease;
+            z-index: 9999;
+        }
+        nav.visible { top: 0; }
+        .nav-logo { height: 60px; filter: brightness(0) invert(1); }
+        .navs { list-style: none; padding: 0; margin: 0; display: flex; justify-content: right; }
+        .navs li { margin: 0 15px; position: relative; }
+        .navs a {
+            color: white; font-size: 18px; padding: 12px 24px; display: block;
+            text-decoration: none; border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px; transition: all 0.3s ease; font-weight: 500;
+        }
+        .navs a:hover { background-color: rgba(255,255,255,0.2); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
+        
+        .dropdown { position: relative; display: inline-block; }
+        .dropdownmenu {
+            display: none; position: absolute; background: rgba(79, 70, 58, 0.95);
+            top: 100%; left: 0; list-style: none; padding: 10px 0; margin: 0;
+            width: 220px; text-align: left; z-index: 10; border-radius: 15px;
+            backdrop-filter: blur(10px); border: 1px solid #b7cfef;
+        }
+        .dropdownmenu li { padding: 10px 20px; position: relative; }
+        .dropdownmenu a { color: white; text-decoration: none; display: block; font-size: 15px; border: none; padding: 8px 16px; border-radius: 8px; transition: all 0.3s ease; }
+        .dropdownmenu a:hover { background-color: #b7cfef; color: #4F463A; transform: translateX(5px); }
+        .dropdown:hover .dropdownmenu { display: block; }
+        .dropdown-sub { position: relative; }
+        .submenu {
+            display: none; position: absolute; right: 100%; top: 0;
+            background: rgba(69, 60, 48, 0.95); list-style: none; padding: 10px 0;
+            margin: 0; width: 220px; text-align: left; z-index: 20;
+            border-radius: 15px 0 15px 15px; backdrop-filter: blur(10px);
+            border: 1px solid #b7cfef; box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        .dropdown-sub:hover .submenu { display: block; }
+        .submenu li { padding: 8px 20px; }
+        .dropdownmenu .dropdown-sub > a::after { content: '◀'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 12px; opacity: 0.7; }
+
+        /* === STICKY CASE STUDY LAYOUT === */
+        
+        .page-header {
+            padding: 80px 5% 60px;
+            text-align: left;
+        }
+        .page-header h1 {
+            font-family: "Teko", sans-serif;
+            font-size: 80px;
+            margin: 0;
+            color: #2c3e50;
+            text-transform: uppercase;
+            line-height: 0.9;
+        }
+        .page-header p {
+            font-size: 20px;
+            color: #7f8c8d;
+            margin-top: 15px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            max-width: 600px;
+        }
+
+        .project-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0 5%;
+            margin-bottom: 150px;
+            border-top: 1px solid #eee;
+            padding-top: 60px;
+        }
+
+        /* LEFT COLUMN: Sticky Content */
+        .project-text {
+            flex: 1;
+            min-width: 350px;
+            padding-right: 60px;
+            position: sticky;
+            top: 150px;
+            align-self: flex-start;
+            height: fit-content;
+        }
+
+        .project-number {
+            font-family: "Teko", sans-serif;
+            font-size: 100px;
+            line-height: 0.8;
+            color: #e9eff6;
+            margin-bottom: -40px;
+            position: relative;
+            z-index: -1;
+        }
+
+        .project-title {
+            font-family: "Teko", sans-serif;
+            font-size: 50px;
+            color: #2c3e50;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .project-meta {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            color: #80a2c9;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        /* Thought Process Blocks */
+        .thought-block { margin-bottom: 25px; }
+        .thought-title {
+            font-family: "Teko", sans-serif;
+            font-size: 20px;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-left: 3px solid #b7cfef;
+            padding-left: 10px;
+            margin-bottom: 8px;
+        }
+        .thought-content { font-size: 16px; color: #555; line-height: 1.6; }
+
+        .tools-list {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .tool-chip {
+            font-size: 13px;
+            background: #f5f7fa;
+            padding: 5px 12px;
+            border-radius: 4px;
+            color: #777;
+            border: 1px solid #e1e4e8;
+        }
+
+        /* RIGHT COLUMN: Visuals */
+        .project-visuals {
+            flex: 1.5;
+            min-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .visual-item {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        .visual-item:hover { transform: translateY(-5px); }
+        .visual-item img { width: 100%; height: auto; display: block; }
+        
+        .visual-caption {
+            padding: 10px 5px;
+            font-size: 14px;
+            color: #999;
+            font-style: italic;
+            text-align: right;
+        }
+
+        /* Footer */
+        footer { background: linear-gradient(135deg, #778ba0 0%, #4F463A 100%); color: white; padding: 70px 0 25px; }
+        .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 5%; display: grid; grid-template-columns: 1fr 2fr; gap: 80px; }
+        .footer-brand { display: flex; flex-direction: column; gap: 25px; }
+        .footer-logo { width: 150px; filter: brightness(0) invert(1); }
+        .social-links { display: flex; gap: 15px; margin-top: 15px; }
+        .social-link { width: 40px; height: 40px; background: rgba(183, 207, 239, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(183, 207, 239, 0.3); transition: all 0.3s ease; }
+        .social-link:hover { background: rgba(183, 207, 239, 0.3); transform: translateY(-3px); }
+        .social-link img { width: 20px; height: 20px; }
+        .footer-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        .nav-column { display: flex; flex-direction: column; }
+        .nav-column h4 { font-size: 1.1rem; margin-bottom: 20px; color: #b7cfef; font-family: "Teko", sans-serif; text-transform: uppercase; border-bottom: 2px solid #b7cfef; display: inline-block; width: fit-content; }
+        .nav-column a { color: #d8d7cb; text-decoration: none; padding: 8px 0; font-size: 0.95rem; transition: color 0.3s; }
+        .nav-column a:hover { color: #b7cfef; }
+        .footer-bottom { text-align: center; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; color: #b7cfef; font-size: 0.9rem; }
+
+        @media (max-width: 900px) {
+            .project-text { position: static; padding-right: 0; margin-bottom: 40px; }
+            .project-wrapper { flex-direction: column; }
+            .footer-container { grid-template-columns: 1fr; text-align: center; }
+            .footer-brand { align-items: center; }
+            .footer-nav { grid-template-columns: 1fr; gap: 30px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="mainNav">
+      <img src="Images/Logo.png" alt="Logo" class="nav-logo" />
+      <ul class="navs">
+        <li><a href="Index.html">Home</a></li>
+        <li class="dropdown">
+          <a href="Gallery.html">Gallery</a>
+          <ul class="dropdownmenu">
+            <li class="dropdown-sub">
+              <a href="javascript:void(0);">Photography</a>
+              <ul class="submenu">
+                <li><a href="Lifestyle Photography.html">Lifestyle Photography</a></li>
+                <li><a href="Product Photography.html">Product Photography</a></li>
+              </ul>
+            </li>
+            <li><a href="Media-Production.html">Media Production</a></li>
+            <li><a href="Graphic-Design.html">Graphic Design</a></li>
+            <li><a href="Web-Design.html">Web Design</a></li>
+            <li><a href="Brand-Identity.html">Brand Identity</a></li>
+          </ul>
+        </li>
+        <li><a href="Resume.html">Resume</a></li>
+      </ul>
+    </nav>
+
+    <div class="main-content">
+        
+        <div class="page-header">
+            <h1>Graphic Design</h1>
+            <p>Visual communication exploring typography, layout, and creative narratives.</p>
+        </div>
+
+        <div class="project-wrapper">
+            
+            <div class="project-text">
+                <div class="project-number">01</div>
+                <h2 class="project-title">Creative Identity</h2>
+                <div class="project-meta">Self-Expression | AI & Mixed Media</div>
+
+                <div class="thought-block">
+                    <div class="thought-title">Theme: Fragmented Memories</div>
+                    <div class="thought-content">
+                        <p>This series serves as a visual manifesto of my identity as a designer. Using the concept of "collage," I pieced together different aspects of my creative journey, reflecting themes of <strong>growth, healing, and innovation</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="thought-block">
+                    <div class="thought-title">Generative AI Integration</div>
+                    <div class="thought-content">
+                        <p>I experimented with <strong>Adobe Firefly (Beta AI)</strong> to generate unique textures and surreal elements. By blending these AI-generated assets with traditional vector graphics in Illustrator, I explored the intersection of human creativity and machine intelligence.</p>
+                    </div>
+                </div>
+
+                <div class="thought-block">
+                    <div class="thought-title">Design Philosophy</div>
+                    <div class="thought-content">
+                        <p>As displayed in the typography poster, I believe design should be <strong>"Good, Clean, Emotional, and Innovative."</strong> This project visualizes these core values through bold typography and layered compositions.</p>
+                    </div>
+                </div>
+
+                <div class="tools-list">
+                    <span class="tool-chip">Adobe Photoshop</span>
+                    <span class="tool-chip">Adobe Illustrator</span>
+                    <span class="tool-chip">Adobe Firefly (Beta AI)</span>
+                    <span class="tool-chip">Collage Art</span>
+                </div>
+            </div>
+
+            <div class="project-visuals">
+                <div class="visual-item">
+                    <img src="Images/P1.jpg" alt="Creative Identity Collage">
+                    <div class="visual-caption">Self-Portrait: Fragmented Memories & Style</div>
+                </div>
+                
+                <div class="visual-item">
+                    <img src="Images/P2.jpg" alt="Design Philosophy Poster">
+                    <div class="visual-caption">Manifesto: Good, Clean, Emotional, Innovative Design</div>
+                </div>
+                
+                <div class="visual-item">
+                    <img src="Images/P3.jpg" alt="Theme Growth and Healing">
+                    <div class="visual-caption">Theme Exploration: Growth & Healing</div>
+                </div>
+
+                <div class="visual-item">
+                    <img src="Images/P4.jpg" alt="Field of Design Interest">
+                    <div class="visual-caption">Abstract Composition: Graphic Design & Filmmaker</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-wrapper">
+            
+            <div class="project-text">
+                <div class="project-number">02</div>
+                <h2 class="project-title">Poster Design</h2>
+                <div class="project-meta">Advertising Narrative | Parks & Rec</div>
+
+                <div class="thought-block">
+                    <div class="thought-title">The Narrative: Urban Oasis</div>
+                    <div class="thought-content">
+                        <p>This diptych creates a visual dialogue between <strong>Action</strong> and <strong>Calm</strong>. The left poster ("Explore nature today") uses bold vertical text to urge immediate action, while the right poster ("Find your peace") offers an escape from the noisy city.</p>
+                    </div>
+                </div>
+
+                <div class="thought-block">
+                    <div class="thought-title">Color Grading Strategy</div>
+                    <div class="thought-content">
+                        <p><strong>The Challenge:</strong> Unifying two photos with different original tones (Winter vs. Fall).</p>
+                        <p><strong>The Solution:</strong> Using Photoshop filters, I adjusted both images to a warm <strong>Orange/Fall Palette</strong>. This unified tone communicates warmth and comfort, enhancing the emotional appeal.</p>
+                    </div>
+                </div>
+
+                <div class="thought-block">
+                    <div class="thought-title">Typography & Effects</div>
+                    <div class="thought-content">
+                        <p>I utilized <strong>opacity and blur effects</strong> in Illustrator to create a "reflective" atmosphere. The hierarchy is strictly managed through font weight, guiding the eye naturally to the QR codes.</p>
+                    </div>
+                </div>
+
+                <div class="tools-list">
+                    <span class="tool-chip">Adobe Photoshop</span>
+                    <span class="tool-chip">Adobe Illustrator</span>
+                    <span class="tool-chip">Filter Effects</span>
+                </div>
+            </div>
+
+            <div class="project-visuals">
+                <div class="visual-item">
+                    <img src="Images/Poster.jpg" alt="Parks and Recreation Diptych Poster">
+                    <div class="visual-caption">A visual narrative inviting audiences to find peace outdoors.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-wrapper">
+            
+            <div class="project-text">
+                <div class="project-number">03</div>
+                <h2 class="project-title">Magazine Layout</h2>
+                <div class="project-meta">Editorial Design | Nature & Growth</div>
+
+                <div class="thought-block">
+                    <div class="thought-title">The Metaphor: Nature & Growth</div>
+                    <div class="thought-content">
+                        <p>The magazine's theme parallels my own journey in the design field: transitioning from a beginner to a skilled creator. Just as nature grows organically, my understanding of <strong>composition and hierarchy</strong> evolved throughout this project.</p>
+                    </div>
+                </div>
+
+                <div class="thought-block">
+                    <div class="thought-title">From Intuition to Structure</div>
+                    <div class="thought-content">
+                        <p>Previously, my designs were intuitive but often cluttered. Learning <strong>Adobe InDesign</strong> was a turning point. I utilized <strong>modular grids and alignment tools</strong> to bring precision to the layout.</p>
+                    </div>
+                </div>
+
+                <div class="thought-block">
+                    <div class="thought-title">Design Philosophy</div>
+                    <div class="thought-content">
+                        <p>This project shifted my focus from "what looks pretty" to <strong>User-Centered Design</strong>. I applied principles of simplicity and physical alignment to align the design with the user's expectations.</p>
+                    </div>
+                </div>
+
+                <div class="tools-list">
+                    <span class="tool-chip">Adobe InDesign</span>
+                    <span class="tool-chip">Grid Systems</span>
+                    <span class="tool-chip">Typography</span>
+                </div>
+            </div>
+
+            <div class="project-visuals">
+                <div class="visual-item">
+                    <img src="Images/Mag1.jpg" alt="Magazine Cover Design">
+                    <div class="visual-caption">The Cover: Symbolizing the threshold of a new career path.</div>
+                </div>
+                <div class="visual-item">
+                    <img src="Images/Mag2.jpg" alt="Magazine Interior Spread">
+                    <div class="visual-caption">Grid System: Using alignment to organize dense text.</div>
+                </div>
+                <div class="visual-item">
+                    <img src="Images/Mag3.jpg" alt="Magazine Editorial Details">
+                </div>
+                <div class="visual-item">
+                    <img src="Images/Mag4.jpg" alt="Magazine Back Cover">
+                </div>
+            </div>
+        </div>
+
+        <div class="project-wrapper" style="border-bottom: none;">
+            
+            <div class="project-text">
+                <div class="project-number">04</div>
+                <h2 class="project-title">Trifold Brochure</h2>
+                <div class="project-meta">Travel Design | Print Production</div>
+
+                <div class="thought-block">
+                    <div class="thought-title">Information Architecture</div>
+                    <div class="thought-content">
+                        <p>The challenge was organizing dense travel information (schedules, maps, tips) into a compact format. I prioritized <strong>hierarchy</strong>—using bold headings and color coding to guide the reader's eye.</p>
+                    </div>
+                </div>
+
+                <div class="thought-block">
+                    <div class="thought-title">Visual Identity</div>
+                    <div class="thought-content">
+                        <p>A fresh, modern style that integrates the color scheme with the content structure, ensuring a seamless reading experience for travelers on the go.</p>
+                    </div>
+                </div>
+
+                <div class="tools-list">
+                    <span class="tool-chip">Layout Design</span>
+                    <span class="tool-chip">Visual Hierarchy</span>
+                    <span class="tool-chip">Print Ready</span>
+                </div>
+            </div>
+
+            <div class="project-visuals">
+                <div class="visual-item">
+                    <img src="Images/Tri1.jpg" alt="Brochure Exterior">
+                    <div class="visual-caption">Exterior Panels: Hook and Call to Action</div>
+                </div>
+                <div class="visual-item">
+                    <img src="Images/Tri2.jpg" alt="Brochure Interior">
+                    <div class="visual-caption">Interior: Detailed Schedule and Info</div>
+                </div>
+                <div class="visual-item">
+                    <img src="Images/Tri3.jpg" alt="Brochure Mockup">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="Images/Logo.png" alt="Logo" class="footer-logo">
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/emily-he-b638b8252" target="_blank" class="social-link"><img src="Images/LinkedIn.png" alt="LI"></a>
+                    <a href="https://www.instagram.com/hxl_emily/" target="_blank" class="social-link"><img src="Images/Instagram.png" alt="IG"></a>
+                    <a href="mailto:emilyhe.i0923@gmail.com" class="social-link"><img src="Images/Email.png" alt="Email"></a>
+                </div>
+            </div>
+            <div class="footer-nav">
+                <div class="nav-column">
+                    <h4>Navigation</h4>
+                    <a href="Index.html">Home</a>
+                    <a href="Gallery.html">Gallery</a>
+                    <a href="Resume.html">Resume</a>
+                </div>
+                <div class="nav-column">
+                    <h4>Portfolio</h4>
+                    <a href="Lifestyle Photography.html">Lifestyle Photography</a>
+                <a href="Media-Production.html">Media Production</a>
+                <a href="Graphic-Design.html">Graphic Design</a>
+            </div>
+            <div class="nav-column">
+                <h4>Design</h4>
+                <a href="Product Photography.html">Product Photography</a>
+                <a href="Web-Design.html">Web Design</a>
+                <a href="Brand-Identity.html">Brand Identity</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Emily He's Portfolio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const nav = document.getElementById("mainNav");
+        
+        window.addEventListener("scroll", function() {
+          let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          
+          if (scrollTop > 100) {
+            nav.classList.add("visible");
+          } else {
+            nav.classList.remove("visible");
+          }
+        });
+      });
+    </script>
+</body>
+</html>

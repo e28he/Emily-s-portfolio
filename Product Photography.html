@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Photography - Emily He</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Teko:wght@300&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html, body {
+          height: 100%;
+      }
+
+      body {
+        font-family: "Libre Caslon Display", serif;
+        line-height: 1.6;
+        background: linear-gradient(135deg, #d8d7cb 0%, #f5f4e9 100%);
+        color: #4f463a;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; 
+      }
+
+      .gallery-container {
+        flex: 1;
+      }
+
+      /* === 导航栏 === */
+      nav {
+        font-family: playfair;
+        background: linear-gradient(135deg, #778ba0 0%, #b7cfef 100%);
+        padding: 30px 50px;
+        text-align: center;
+        position: fixed;
+        top: -100px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 20px rgba(79, 70, 58, 0.2);
+        border-bottom: 1px solid white;
+        transition: top 0.5s ease;
+        z-index: 9999;
+      }
+
+      nav.visible {
+        top: 0;
+      }
+
+      .nav-logo {
+        height: 60px;
+        filter: brightness(0) invert(1);
+      }
+
+      .navs {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: right;
+      }
+
+      .navs li {
+        margin: 0 15px;
+        position: relative; 
+      }
+
+      .navs a {
+        color: white;
+        font-size: 18px;
+        padding: 12px 24px;
+        display: block;
+        text-decoration: none;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .navs a:hover {
+        background-color: rgba(255,255,255,0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+      }
+
+      /* Dropdown CSS */
+      .dropdown { position: relative; display: inline-block; }
+      .dropdownmenu {
+        display: none; position: absolute; background: rgba(79, 70, 58, 0.95);
+        top: 100%; left: 0; list-style: none; padding: 10px 0; margin: 0;
+        width: 220px; text-align: left; z-index: 10; border-radius: 15px;
+        backdrop-filter: blur(10px); border: 1px solid #b7cfef;
+      }
+      .dropdownmenu li { padding: 10px 20px; position: relative; }
+      .dropdownmenu a {
+        color: white; text-decoration: none; display: block; font-size: 15px;
+        border: none; padding: 8px 16px; border-radius: 8px; transition: all 0.3s ease;
+      }
+      .dropdownmenu a:hover { background-color: #b7cfef; color: #4F463A; transform: translateX(5px); }
+      .dropdown:hover .dropdownmenu { display: block; }
+      .dropdown-sub { position: relative; }
+      .submenu {
+        display: none; position: absolute; right: 100%; top: 0;
+        background: rgba(69, 60, 48, 0.95); list-style: none; padding: 10px 0;
+        margin: 0; width: 220px; text-align: left; z-index: 20;
+        border-radius: 15px 0 15px 15px; backdrop-filter: blur(10px);
+        border: 1px solid #b7cfef; box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.3);
+      }
+      .dropdown-sub:hover .submenu { display: block; }
+      .submenu li { padding: 8px 20px; }
+      .submenu a:hover { transform: translateX(-5px); }
+      .dropdownmenu .dropdown-sub > a::after {
+        content: '◀'; position: absolute; right: 12px; top: 50%;
+        transform: translateY(-50%); font-size: 12px; opacity: 0.7;
+      }
+
+      /* Hero Section */
+      .photography-hero {
+        height: 70vh;
+        background: linear-gradient(135deg, #778ba0 0%, #b7cfef 100%);
+        display: flex; align-items: center; justify-content: center;
+        position: relative; overflow: hidden;
+      }
+      .hero-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: url("Images/Product-Hero.jpg") center/cover no-repeat;
+        opacity: 0.15;
+      }
+      .hero-content { text-align: center; z-index: 2; padding: 0 20px; max-width: 800px; color: white; }
+      .hero-title {
+        font-family: "Teko", sans-serif; font-size: 5rem; letter-spacing: 6px;
+        text-transform: uppercase; margin-bottom: 20px; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      }
+      .hero-subtitle { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto 40px; font-weight: 300; letter-spacing: 2px; }
+
+      /* Gallery Layout */
+      .gallery-container { padding: 60px 5%; margin: 0 auto; width: 100%; background: linear-gradient(180deg, #f5f4e9 0%, #e8e7dc 100%); }
+      
+      .category-header {
+        text-align: center; margin-bottom: 50px; padding-bottom: 20px;
+        border-bottom: 3px solid #b7cfef; position: relative;
+      }
+      .category-header h3 {
+        font-family: "Teko", sans-serif; font-size: 2.8rem; color: #4f463a;
+        display: inline-flex; align-items: center; gap: 15px; padding: 0 30px;
+        background: rgba(248, 247, 235, 0.9); position: relative; z-index: 2;
+      }
+
+      /* Grid System */
+      .photo-grid-mixed {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .photo-item {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        background: white;
+        box-shadow: 0 10px 30px rgba(79, 70, 58, 0.1);
+        aspect-ratio: 3/4; /* Standard Photo Ratio */
+      }
+
+      /* === VIDEO / REEL STYLES === */
+      .social-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      /* Use the same class logic but specifically for videos */
+      .video-item {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        aspect-ratio: 9/16; /* 9:16 Vertical Ratio for Reels */
+        cursor: pointer;
+        background: black;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        border: 2px solid white;
+        transition: transform 0.3s ease;
+      }
+
+      .video-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px rgba(183, 207, 239, 0.4);
+        border-color: #b7cfef;
+      }
+
+      .photo-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+      }
+
+      .video-item:hover .photo-image {
+        transform: scale(1.05);
+      }
+
+      .video-info {
+        position: absolute; bottom: 0; left: 0; width: 100%;
+        padding: 20px;
+        background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        color: white;
+        z-index: 3;
+      }
+      .platform-tag {
+        font-family: "Teko", sans-serif;
+        background: #b7cfef; color: #4f463a;
+        padding: 2px 8px; border-radius: 4px;
+        font-size: 1rem; margin-bottom: 5px; display: inline-block;
+      }
+
+      /* Play Icon Style */
+      .play-icon {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60px; height: 60px;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        border: 2px solid rgba(255,255,255,0.8);
+        z-index: 2;
+        transition: all 0.3s ease;
+      }
+      .play-icon::after {
+        content: ''; display: block; width: 0; height: 0;
+        border-left: 18px solid white;
+        border-top: 12px solid transparent;
+        border-bottom: 12px solid transparent;
+        margin-left: 5px;
+      }
+      .video-item:hover .play-icon {
+        transform: translate(-50%, -50%) scale(1.1);
+        background: rgba(183, 207, 239, 0.8);
+        border-color: white;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .photo-grid-mixed { grid-template-columns: 1fr; padding: 0 20px;}
+        .social-grid { grid-template-columns: 1fr; max-width: 320px; }
+        .footer-container { grid-template-columns: 1fr; text-align: center; }
+        .footer-brand { align-items: center; }
+        .footer-nav { grid-template-columns: 1fr; gap: 30px; }
+      }
+
+      /* Footer */
+      footer { background: linear-gradient(135deg, #778ba0 0%, #4F463A 100%); color: white; padding: 70px 0 25px; margin-top: 100px; }
+      .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 5%; display: grid; grid-template-columns: 1fr 2fr; gap: 80px; }
+      .footer-brand { display: flex; flex-direction: column; gap: 25px; }
+      .footer-logo { width: 150px; filter: brightness(0) invert(1); }
+      .social-links { display: flex; gap: 15px; margin-top: 15px; }
+      .social-link { width: 40px; height: 40px; background: rgba(183, 207, 239, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(183, 207, 239, 0.3); }
+      .social-link img { width: 20px; height: 20px; }
+      .footer-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+      .nav-column { display: flex; flex-direction: column; }
+      .nav-column h4 { font-size: 1.1rem; margin-bottom: 20px; color: #b7cfef; font-family: "Teko", sans-serif; text-transform: uppercase; border-bottom: 2px solid #b7cfef; display: inline-block; width: fit-content; }
+      .nav-column a { color: #d8d7cb; text-decoration: none; padding: 8px 0; font-size: 0.95rem; transition: color 0.3s; }
+      .nav-column a:hover { color: #b7cfef; }
+      .footer-bottom { text-align: center; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; color: #b7cfef; font-size: 0.9rem; }
+    </style>
+</head>
+
+<body>
+    <nav id="mainNav">
+      <img src="Images/Logo.png" alt="Logo" class="nav-logo" />
+      <ul class="navs">
+        <li><a href="Index.html">Home</a></li>
+        <li class="dropdown">
+          <a href="Gallery.html">Gallery</a>
+          <ul class="dropdownmenu">
+            <li class="dropdown-sub">
+              <a href="javascript:void(0);">Photography</a>
+              <ul class="submenu">
+                <li><a href="Lifestyle Photography.html">Lifestyle Photography</a></li>
+                <li><a href="Product Photography.html">Product Photography</a></li>
+              </ul>
+            </li>
+            <li><a href="Media-Production.html">Media Production</a></li>
+            <li><a href="Graphic-Design.html">Graphic Design</a></li>
+            <li><a href="Web-Design.html">Web Design</a></li>
+            <li><a href="Brand-Identity.html">Brand Identity</a></li>
+          </ul>
+        </li>
+        <li><a href="Resume.html">Resume</a></li>
+      </ul>
+    </nav>
+
+    <div class="photography-hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">PRODUCT & COMMERCIAL</h1>
+        <p class="hero-subtitle">
+          Professional product showcase and social media content creation for SILKYO
+        </p>
+      </div>
+    </div>
+
+    <div class="gallery-container">
+  
+      <div class="category-header">
+        <h3><span class="category-icon"></span> SILKYO COLLECTION</h3>
+        <p style="color:#666; margin-top:10px;">High-end pearl jewelry photography</p>
+      </div>
+    
+      <div class="photo-grid-mixed">
+        <div class="photo-item">
+            <img src="Images/Product 1.jpg" alt="Pearl Detail" class="photo-image">
+            <div class="photo-info">
+                <div class="photo-caption">Pearl Texture</div>
+                <div class="photo-location">Studio Macro | Canon G7X III</div>
+            </div>
+        </div>
+        
+        <div class="photo-item">
+            <img src="Images/Product 2.jpg" alt="Brand Packaging" class="photo-image">
+            <div class="photo-info">
+                <div class="photo-caption">Unboxing</div>
+                <div class="photo-location">Brand Identity | SILKYO</div>
+            </div>
+        </div>
+    
+        <div class="photo-item">
+            <img src="Images/Product 3.jpg" alt="Model Styling" class="photo-image">
+            <div class="photo-info">
+                <div class="photo-caption">Elegance</div>
+                <div class="photo-location">Model Session</div>
+            </div>
+        </div>
+    
+        <div class="photo-item">
+            <img src="Images/Product 4.jpg" alt="Golden Pearl" class="photo-image">
+            <div class="photo-info">
+                <div class="photo-caption">Golden Glow</div>
+                <div class="photo-location">Studio Light</div>
+            </div>
+        </div>
+    
+         <div class="photo-item">
+            <img src="Images/Product 5.jpg" alt="Necklace" class="photo-image">
+            <div class="photo-info">
+                <div class="photo-caption">Classic Series</div>
+                <div class="photo-location">SILKYO Collection</div>
+            </div>
+        </div>
+    
+         <div class="photo-item">
+            <img src="Images/Product 6.jpg" alt="Details" class="photo-image">
+            <div class="photo-info">
+                <div class="photo-caption">Craftsmanship</div>
+                <div class="photo-location">Macro Shot</div>
+            </div>
+        </div>
+        <div class="photo-item">
+          <img src="Images/Product 7.jpg" alt="Golden Pearl" class="photo-image">
+          <div class="photo-info">
+              <div class="photo-caption">Golden Glow</div>
+              <div class="photo-location">Studio Light</div>
+          </div>
+      </div>
+  
+       <div class="photo-item">
+          <img src="Images/Product 8.jpg" alt="Necklace" class="photo-image">
+          <div class="photo-info">
+              <div class="photo-caption">Classic Series</div>
+              <div class="photo-location">SILKYO Collection</div>
+          </div>
+      </div>
+  
+       <div class="photo-item">
+          <img src="Images/Product 9.jpg" alt="Details" class="photo-image">
+          <div class="photo-info">
+              <div class="photo-caption">Craftsmanship</div>
+              <div class="photo-location">Macro Shot</div>
+          </div>
+      </div>
+      </div>
+    
+      <div style="height: 100px; display:flex; align-items:center; justify-content:center; margin-top:50px;">
+        <div style="width: 200px; height: 2px; background: #b7cfef;"></div>
+      </div>
+    
+      <div class="category-header">
+        <h3><span class="category-icon">📱</span> SOCIAL MEDIA CONTENT</h3>
+        <p style="color:#666; margin-top:10px;">Short-form video content created for brand promotion</p>
+      </div>
+    
+      <div class="social-grid">
+        
+        <div class="video-item clickable-media" data-video-src="Videos/Reel1.mov">
+            <img src="Images/VideoCover1.jpeg" alt="Reel 1 Cover" class="photo-image">
+            <div class="play-icon"></div>
+            <div class="video-info">
+                <span class="platform-tag">Rednote</span>
+                <p class="media-caption">Celebrity Inspired</p>
+                <span class="media-location" style="display:none;">Product Showcase | Video</span>
+            </div>
+        </div>
+    
+        <div class="video-item clickable-media" data-video-src="Videos/Reel2.mov">
+            <img src="Images/VideoCover2.jpeg" alt="Reel 2 Cover" class="photo-image">
+            <div class="play-icon"></div>
+            <div class="video-info">
+                <span class="platform-tag">Rednote</span>
+                <p class="media-caption">Premium Luster</p>
+                <span class="media-location" style="display:none;">Product Showcase | Video</span>
+            </div>
+        </div>
+    
+        <div class="video-item clickable-media" data-video-src="Videos/Reel3.mov">
+            <img src="Images/VideoCover3.jpeg" alt="Reel 3 Cover" class="photo-image">
+            <div class="play-icon"></div>
+            <div class="video-info">
+                <span class="platform-tag">Rednote</span>
+                <p class="media-caption">Edgy Aesthetics</p>
+                <span class="media-location" style="display:none;">How-To Guide | Video</span>
+            </div>
+        </div>
+
+      </div>
+    
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="Images/Logo.png" alt="Logo" class="footer-logo">
+                <div class="social-links">
+                    <a href="#" class="social-link"><img src="Images/LinkedIn.png" alt="LI"></a>
+                    <a href="#" class="social-link"><img src="Images/Instagram.png" alt="IG"></a>
+                    <a href="#" class="social-link"><img src="Images/Email.png" alt="Email"></a>
+                </div>
+            </div>
+            <div class="footer-nav">
+                <div class="nav-column">
+                    <h4>Navigation</h4>
+                    <a href="Index.html">Home</a>
+                    <a href="Gallery.html">Gallery</a>
+                    <a href="Resume.html">Resume</a>
+                </div>
+                <div class="nav-column">
+                    <h4>Portfolio</h4>
+                    <a href="Lifestyle Photography.html">Lifestyle Photography</a>
+                    <a href="Media-Production.html">Media Production</a>
+                    <a href="Graphic-Design.html">Graphic Design</a>
+                </div>
+                <div class="nav-column">
+                    <h4>Design</h4>
+                    <a href="Product Photography.html">Product Photography</a>
+                    <a href="Web-Design.html">Web Design</a>
+                    <a href="Brand-Identity.html">Brand Identity</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Emily He's Portfolio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const nav = document.getElementById("mainNav");
+        
+        // 1. Navigation Scroll Logic
+        window.addEventListener("scroll", function() {
+          let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          if (scrollTop > 100) {
+            nav.classList.add("visible");
+          } else {
+            nav.classList.remove("visible");
+          }
+        });
+
+        // 2. Universal Lightbox (Photos + Videos)
+        // Select both regular photos and video items
+        const mediaItems = document.querySelectorAll(".photo-item, .clickable-media");
+        
+        mediaItems.forEach((item) => {
+          item.addEventListener("click", function () {
+            
+            // Extract Data
+            let imgSrc = "";
+            let caption = "";
+            let location = "";
+            const videoSrc = this.getAttribute("data-video-src");
+
+            // Logic to grab text differs slightly between photos and videos
+            if (this.classList.contains('photo-item')) {
+                imgSrc = this.querySelector(".photo-image").src;
+                caption = this.querySelector(".photo-caption").textContent;
+                location = this.querySelector(".photo-location").textContent;
+            } else {
+                // It's a video item
+                imgSrc = this.querySelector(".photo-image").src; // Cover image
+                caption = this.querySelector(".media-caption").textContent;
+                location = this.querySelector(".media-location").textContent;
+            }
+
+            // Determine Content (Image vs Video)
+            let contentHTML = "";
+            
+            if (videoSrc) {
+                // Render Video Player
+                contentHTML = `
+                <video controls autoplay loop playsinline style="
+                    max-width: 100%;
+                    max-height: 80vh; 
+                    border-radius: 10px;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+                    outline: none;
+                ">
+                    <source src="${videoSrc}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>`;
+            } else {
+                // Render Image
+                contentHTML = `
+                <img src="${imgSrc}" alt="${caption}" style="
+                    max-width: 100%;
+                    max-height: 70vh;
+                    object-fit: contain;
+                    border-radius: 10px;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+                ">`;
+            }
+
+            // Create Modal
+            const modal = document.createElement("div");
+            modal.style.cssText = `
+              position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+              background: rgba(0,0,0,0.95); display: flex; flex-direction: column;
+              align-items: center; justify-content: center; z-index: 99999;
+              backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.3s ease;
+            `;
+
+            modal.innerHTML = `
+              <div style="max-width: 90%; max-height: 80vh; display:flex; justify-content:center;">
+                ${contentHTML}
+              </div>
+              <div style="text-align: center; color: white; padding: 30px 20px 20px;">
+                <h3 style="font-family: 'Teko', sans-serif; font-size: 2rem; margin-bottom: 8px; color: #b7cfef;">${caption}</h3>
+                <p style="color: #cccccc; font-size: 1.2rem; margin-bottom: 20px;">${location}</p>
+                <button class="close-btn" style="background: rgba(183, 207, 239, 0.2); border: 2px solid rgba(183, 207, 239, 0.4); color: white; padding: 12px 30px; border-radius: 30px; font-family: 'Teko', sans-serif; cursor: pointer; transition: all 0.3s;">CLOSE</button>
+              </div>
+            `;
+
+            document.body.appendChild(modal);
+            
+            // Fade in
+            requestAnimationFrame(() => { modal.style.opacity = "1"; });
+
+            // Close Logic
+            const closeModal = () => {
+                // Pause video if playing
+                const video = modal.querySelector('video');
+                if (video) video.pause();
+
+                modal.style.opacity = "0";
+                setTimeout(() => { if(document.body.contains(modal)) document.body.removeChild(modal); }, 300);
+            };
+
+            // Bind Events
+            modal.querySelector(".close-btn").addEventListener("click", (e) => { e.stopPropagation(); closeModal(); });
+            
+            // Click outside to close
+            modal.addEventListener("click", (e) => { 
+                if(e.target === modal || e.target.parentElement === modal) closeModal(); 
+            });
+
+            // ESC key to close
+            document.addEventListener("keydown", function escListener(e) {
+                if(e.key === "Escape") {
+                    closeModal();
+                    document.removeEventListener("keydown", escListener);
+                }
+            });
+
+          });
+        });
+      });
+    </script>
+</body>
+</html>
